@@ -5,8 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XY_FZ35_Control"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="XY-FZ35 Control" Height="450" Width="800">
+    <Border Padding="10">
+        <StackPanel>
+            <Button x:Name="ComButton" Click="ComButton_Click" Content="Com"/>
+            <ComboBox x:Name="ComList"/>
+            <Button x:Name="Test" Click="TestButton_Click" Content="Test"/>
+            <TextBox x:Name="TestTextBox" x:FieldModifier="public" Height="300" TextWrapping="Wrap" Text="TextBox"  />
+
+
+        </StackPanel>
+    </Border>
 </Window>
