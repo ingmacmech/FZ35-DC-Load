@@ -9,6 +9,9 @@ using System.Text.RegularExpressions;
 
 namespace XY_FZ35_Control
 {
+    /// <summary>
+    /// Class to control the XY-FZ35 DC Electronic Load
+    /// </summary>
     class FZ35_DCLoad
     {
         // Device Comands
@@ -42,7 +45,7 @@ namespace XY_FZ35_Control
         private string ohpValue = "";
 
 
-
+        // Private Variable
         private string portName = "";
         private SerialPort sPort = new SerialPort();
         private static Regex receivedSettingsPatern = new Regex(".*?[O][V][P][:](?<ovp>[0-9]+[.][0-9])"  + 
@@ -59,26 +62,24 @@ namespace XY_FZ35_Control
                                                                ".*?(?<time>[0-9]+[:][0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         List<double[]> loggedData = new List<double[]>(3600); // Holds data for 1h after it has to allocate
-
         DateTime timeStartLogging;
 
-                                                               
-        
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="portName"> COM Port name ex. "COM1" </param>
         public FZ35_DCLoad(string portName)
         {
             SetPortName(portName);
             OpenCommunicationPort();
             sPort.DiscardInBuffer();
             sPort.DataReceived += DataRecivedHandler;
-
         }
 
-        private void SetStartLogTime()
-        {
-            timeStartLogging =  DateTime.Now;
-        }
-
+        /// <summary>
+        /// Calculates a time stamp for the logged data
+        /// </summary>
+        /// <returns> Returns the time since the logging started </returns>
         private double GetTimeStamp()
         {
             double timeStamp;
@@ -90,11 +91,9 @@ namespace XY_FZ35_Control
             return timeStamp;
         }
 
-        public void SearchForDevices()
-        {
-
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
         private void OpenCommunicationPort()
         {
             sPort.BaudRate = 9600;
@@ -103,30 +102,33 @@ namespace XY_FZ35_Control
             sPort.Parity = Parity.None;
             sPort.PortName = portName;
             
-
             try
             {
                 sPort.Open();
             }
             catch (Exception)
             {
-
                 throw;
             }
-            
-
         }
 
-               
+        /// <summary>
+        /// Sets the port name
+        /// </summary>
+        /// <param name="portName"> Serial port name ex. "COM1" </param>        
         private void SetPortName(string portName)
         {
             this.portName = portName;
         }
 
-
+        /// <summary>
+        /// Sets the over voltage protection of the device and stores the value.
+        /// Checks if the new value is inside the limits 
+        /// </summary>
+        /// <param name="voltageLevel"></param>
         public void SetOverVoltageProtection(double voltageLevel)
         {
-            if (voltageLevel <= MAX_VOLTAGE)
+            if (voltageLevel <= MAX_VOLTAGE) //TODO: Check for minimum value
             {
                 ovpValue = voltageLevel;
             }
@@ -135,9 +137,14 @@ namespace XY_FZ35_Control
                 ovpValue = MAX_VOLTAGE;
                 MessageBox.Show(VALUE_OUT_OF_RANGE);
             }
-
+            sPort.WriteLine("OVP:" + ovpValue.ToString("00.0"));
         }
 
+        /// <summary>
+        /// Sets the over current protection of the device and stores the value.
+        /// Checks the new value if it exceeded the Max value.  
+        /// </summary>
+        /// <param name="currentLevel"> Over current protection value </param>
         public void SetOverCurrentProtection(double currentLevel)
         {
             if (currentLevel <= MAX_CURRENT)
@@ -149,9 +156,15 @@ namespace XY_FZ35_Control
                 ocpValue = MAX_CURRENT;
                 MessageBox.Show(VALUE_OUT_OF_RANGE);
             }
-
+            sPort.WriteLine("OCP:" + ocpValue.ToString("0.00"));
         }
 
+        /// <summary>
+        /// Sets the over power protection of the device and stores the value.
+        /// Checks the new value if it exceeded the Max value.
+        /// The device turns off the Input if the power exceeds this value
+        /// </summary>
+        /// <param name="powerLevel"> Over power protection value in W </param>
         public void SetOverPowerProtection(double powerLevel)
         {
             if (powerLevel <= MAX_POWER)
@@ -163,16 +176,33 @@ namespace XY_FZ35_Control
                 oppValue = MAX_POWER;
                 MessageBox.Show(VALUE_OUT_OF_RANGE);
             }
-
+            sPort.WriteLine("OPP:" + oppValue.ToString("00.00"));
         }
 
+        /// <summary>
+        /// Sets the maximum capacity of the device and stores the value.
+        /// The device will turn off the input if the capacity level is reached. 
+        /// </summary>
+        /// <param name="capacityLevel"> Capacity value in Ah </param>
         public void SetMaximumCapacity(double capacityLevel)
         {
+            /* TODO: The capacity value can be set in different ranges.
+             *       Check if it's possible and how to implement it. 
+            */
             capacityValue = capacityLevel;
+            sPort.WriteLine("OHA:" + capacityLevel.ToString("0.000"));
         }
 
+        /// <summary>
+        /// Sets minimum voltage protection of the device and stores it.
+        /// The new value is checked against the max and min boundaries.
+        /// The device will turn of if this voltage is reached.
+        /// This is useful to protect the battery during discharge.
+        /// </summary>
+        /// <param name="voltageLevel">  </param>
         public void SetLowVoltageProtection(double voltageLevel)
         {
+            // TODO: Implement the max value check, and decide how to react 
             if (voltageLevel >= MIN_VOLTAGE)
             {
                 lvpValue = voltageLevel;
@@ -182,6 +212,7 @@ namespace XY_FZ35_Control
                 lvpValue = MIN_VOLTAGE;
                 MessageBox.Show(VALUE_OUT_OF_RANGE);
             }
+            sPort.WriteLine("LVP:" + voltageLevel.ToString("00.0"));
         }
 
 
@@ -231,7 +262,7 @@ namespace XY_FZ35_Control
 
         public void StartLogging()
         {
-            SetStartLogTime();
+            timeStartLogging = DateTime.Now;
             StartUpload();
         }
 
