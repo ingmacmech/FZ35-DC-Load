@@ -56,7 +56,8 @@ namespace XY_FZ35_Control
         {
 
             //leftDevice.ReadSettings();
-            //leftDevice.SetLoadCurrent(1.50);
+            leftDevice.SetLoadCurrent(1.00);
+            /*
             leftDevice.StartLogging();
             System.Threading.Thread.Sleep(200);
             leftDevice.TurnOnLoad();
@@ -64,6 +65,7 @@ namespace XY_FZ35_Control
             leftDevice.TurnOffLoad();
             System.Threading.Thread.Sleep(200);
             leftDevice.StopLogging();
+            */
 
 
 

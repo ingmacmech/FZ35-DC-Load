@@ -215,18 +215,26 @@ namespace XY_FZ35_Control
             sPort.WriteLine("LVP:" + voltageLevel.ToString("00.0"));
         }
 
-
+        /// <summary>
+        /// Returns the reference to the Com Port
+        /// </summary>
+        /// <returns> ComPort reference </returns>
         public object GetRef()
         {
             return sPort;
         }
 
-
+        /// <summary>
+        /// Starts the data upload of the device
+        /// </summary>
         private void StartUpload()
         {
             sPort.WriteLine(START_COMAND);
         }
 
+        /// <summary>
+        /// Stops the data upload of the device
+        /// </summary>
         private void StopUpload()
         {
             sPort.WriteLine(STOP_COMAND);
@@ -237,29 +245,49 @@ namespace XY_FZ35_Control
             return sPort.ReadLine();
         }
 
+
+        /// <summary>
+        /// Turns on the device input
+        /// </summary>
         public void TurnOnLoad()
         {
             sPort.WriteLine(TURN_ON_LOAD);
         }
 
+        /// <summary>
+        /// Turns off the device input 
+        /// </summary>
         public void TurnOffLoad()
         {
             sPort.WriteLine(TURN_OFF_LOAD);
         }
 
+        /// <summary>
+        /// Sets the sinking current for the device input
+        /// </summary>
+        /// <param name="setCurrent"> Set Current in A </param>
         public void SetLoadCurrent(double setCurrent)
         {
+            // TODO: Test for max value
             string test;
             test = setCurrent.ToString("N2") + "A";
             
-            sPort.WriteLine(test);
+            //sPort.WriteLine(test);
+            sPort.Write(test);
         }
 
+
+        /// <summary>
+        /// Sends the command to output the device settings ex. over current protection, over voltage protection etc.
+        /// </summary>
         public void ReadSettings()
         {
             sPort.WriteLine(READ_SETTINGS);           
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void StartLogging()
         {
             timeStartLogging = DateTime.Now;
