@@ -309,6 +309,11 @@ namespace XY_FZ35_Control
             StopUpload();
         }
 
+        public void Disconect()
+        {
+            sPort.Close();
+        }
+
 
         public void DataRecivedHandler(object sender, SerialDataReceivedEventArgs e)
         {

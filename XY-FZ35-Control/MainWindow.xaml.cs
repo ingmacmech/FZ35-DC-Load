@@ -21,8 +21,8 @@ namespace XY_FZ35_Control
     /// </summary>
     public partial class MainWindow : Window
     {
-        private FZ35_DCLoad leftDevice = new FZ35_DCLoad("COM13");
-        private SerialPort sPort;
+        private FZ35_DCLoad device; //= new FZ35_DCLoad("COM13");
+       
         private String[] value = new String[1000];
        
         
@@ -30,9 +30,6 @@ namespace XY_FZ35_Control
         public MainWindow()
         {
             InitializeComponent();
-            sPort = (SerialPort)leftDevice.GetRef();
-            //sPort.DataReceived += DataRecivedHandler;
-
         }
 
 
@@ -43,9 +40,11 @@ namespace XY_FZ35_Control
 
         private void SearchForPorts()
         {
+            // ISSUE: After reload com ports. none is selected 
             string[] ports = SerialPort.GetPortNames();
 
-            foreach(string port in ports)
+            ComList.Items.Clear();
+            foreach (string port in ports)
             {
                 ComList.Items.Add(port);
             }
@@ -54,43 +53,42 @@ namespace XY_FZ35_Control
         private void TestButton_Click(object sender, RoutedEventArgs e)
         {
 
-            //leftDevice.ReadSettings();
-            leftDevice.SetLoadCurrent(1.00);
-            /*
-            leftDevice.StartLogging();
-            System.Threading.Thread.Sleep(200);
-            leftDevice.TurnOnLoad();
-            System.Threading.Thread.Sleep(10 * 1000);
-            leftDevice.TurnOffLoad();
-            System.Threading.Thread.Sleep(200);
-            leftDevice.StopLogging();
-            */
-
-
-
-
-            /* 
-             leftDevice.StartUpload();
-
-             leftDevice.StopUpload();
-             index = 0;
-             */
-
+           
         }
 
         public void SetText (string str)
         {
-           // TestTextBox.AppendText(str);
+           
         }
 
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                device = new FZ35_DCLoad(ComList.SelectedItem.ToString());
+                messageTextBox.AppendText("Connected to device on Port: " 
+                                               + ComList.SelectedItem.ToString()
+                                               + "\n");
 
+            }
+            catch (Exception)
+            {
+                messageTextBox.AppendText("Connect to device failed!\n");             
+            }
+            
         }
 
         private void Disconnect_Click(object sender, RoutedEventArgs e)
         {
-
+            if(device != null)
+            {
+                device.Disconect();
+                messageTextBox.AppendText("Disconnected!\n");
+            }
+            else
+            {
+                messageTextBox.AppendText("No device to disconnect\n");
+            }
         }
 
         private void LogButton_Click(object sender, RoutedEventArgs e)

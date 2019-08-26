@@ -17,13 +17,14 @@
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
-                        <Button Margin="10 0 10 0" Grid.Column="0" x:Name="ComButton" Click="ComButton_Click" Content="Show Com"/>
-                        <Button Grid.Column="1" x:Name="Connect" Click="Connect_Click" Content="Connect"/>
-                        <Button  Margin="10 0 10 0" Grid.Column="2" x:Name="Disconnect" Click="Disconnect_Click" Content="Disconnect"/>
-                        
+                        <Button x:Name="ComButton" Margin="10 0 10 0" Grid.Column="0"  Click="ComButton_Click" Content="Show Com"/>
+                        <Button x:Name="Connect" Grid.Column="1"  Click="Connect_Click" Content="Connect"/>
+                        <Button x:Name="Disconnect" Margin="10 0 10 0" Grid.Column="2"  Click="Disconnect_Click" Content="Disconnect"/>
                         
                     </Grid>
+                    
                     <ComboBox x:Name="ComList" Margin="0 10" SelectedIndex="0"/>
+                    
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -96,7 +97,8 @@
 
                     </Grid>
 
-                    <TextBox Text="Serial Command Display" Margin="0 20 0 0" Height="150" ScrollViewer.CanContentScroll="True"/>
+                    <TextBlock Text="Messages:" FontWeight="Bold" Margin="0 10 0 0"/>
+                    <TextBox x:Name="messageTextBox"  Margin="0 5 0 0" Height="150" ScrollViewer.CanContentScroll="True"/>
                     
                 </StackPanel>
 
