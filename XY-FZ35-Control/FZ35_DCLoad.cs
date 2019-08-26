@@ -128,6 +128,8 @@ namespace XY_FZ35_Control
         /// <param name="voltageLevel"></param>
         public void SetOverVoltageProtection(double voltageLevel)
         {
+            string voltage;
+
             if (voltageLevel <= MAX_VOLTAGE) //TODO: Check for minimum value
             {
                 ovpValue = voltageLevel;
@@ -137,7 +139,9 @@ namespace XY_FZ35_Control
                 ovpValue = MAX_VOLTAGE;
                 MessageBox.Show(VALUE_OUT_OF_RANGE);
             }
-            sPort.WriteLine("OVP:" + ovpValue.ToString("00.0"));
+
+            voltage = "OVP:" + ovpValue.ToString("00.0");
+            sPort.Write(voltage);
         }
 
         /// <summary>
@@ -147,6 +151,8 @@ namespace XY_FZ35_Control
         /// <param name="currentLevel"> Over current protection value </param>
         public void SetOverCurrentProtection(double currentLevel)
         {
+            string current;
+
             if (currentLevel <= MAX_CURRENT)
             {
                 ocpValue = currentLevel;
@@ -156,7 +162,9 @@ namespace XY_FZ35_Control
                 ocpValue = MAX_CURRENT;
                 MessageBox.Show(VALUE_OUT_OF_RANGE);
             }
-            sPort.WriteLine("OCP:" + ocpValue.ToString("0.00"));
+
+            current = "OCP:" + ocpValue.ToString("0.00");
+            sPort.Write(current);
         }
 
         /// <summary>
@@ -167,6 +175,7 @@ namespace XY_FZ35_Control
         /// <param name="powerLevel"> Over power protection value in W </param>
         public void SetOverPowerProtection(double powerLevel)
         {
+            string power;
             if (powerLevel <= MAX_POWER)
             {
                 oppValue = powerLevel;
@@ -176,7 +185,9 @@ namespace XY_FZ35_Control
                 oppValue = MAX_POWER;
                 MessageBox.Show(VALUE_OUT_OF_RANGE);
             }
-            sPort.WriteLine("OPP:" + oppValue.ToString("00.00"));
+
+            power = "OPP:" + oppValue.ToString("00.00");
+            sPort.Write(power);
         }
 
         /// <summary>
@@ -186,11 +197,14 @@ namespace XY_FZ35_Control
         /// <param name="capacityLevel"> Capacity value in Ah </param>
         public void SetMaximumCapacity(double capacityLevel)
         {
+            string capacity;
             /* TODO: The capacity value can be set in different ranges.
              *       Check if it's possible and how to implement it. 
             */
             capacityValue = capacityLevel;
-            sPort.WriteLine("OHA:" + capacityLevel.ToString("0.000"));
+
+            capacity = "OHA:" + capacityLevel.ToString("0.000");
+            sPort.Write(capacity);
         }
 
         /// <summary>
@@ -202,6 +216,7 @@ namespace XY_FZ35_Control
         /// <param name="voltageLevel">  </param>
         public void SetLowVoltageProtection(double voltageLevel)
         {
+            string voltage;
             // TODO: Implement the max value check, and decide how to react 
             if (voltageLevel >= MIN_VOLTAGE)
             {
@@ -212,7 +227,10 @@ namespace XY_FZ35_Control
                 lvpValue = MIN_VOLTAGE;
                 MessageBox.Show(VALUE_OUT_OF_RANGE);
             }
-            sPort.WriteLine("LVP:" + voltageLevel.ToString("00.0"));
+
+            voltage = "LVP:" + voltageLevel.ToString("00.0");
+
+            sPort.Write(voltage);
         }
 
         /// <summary>
@@ -229,7 +247,7 @@ namespace XY_FZ35_Control
         /// </summary>
         private void StartUpload()
         {
-            sPort.WriteLine(START_COMAND);
+            sPort.Write(START_COMAND);
         }
 
         /// <summary>
@@ -237,21 +255,15 @@ namespace XY_FZ35_Control
         /// </summary>
         private void StopUpload()
         {
-            sPort.WriteLine(STOP_COMAND);
+            sPort.Write(STOP_COMAND);
         }
-
-        public string ReadMessage()
-        {
-            return sPort.ReadLine();
-        }
-
 
         /// <summary>
         /// Turns on the device input
         /// </summary>
         public void TurnOnLoad()
         {
-            sPort.WriteLine(TURN_ON_LOAD);
+            sPort.Write(TURN_ON_LOAD);
         }
 
         /// <summary>
@@ -259,7 +271,7 @@ namespace XY_FZ35_Control
         /// </summary>
         public void TurnOffLoad()
         {
-            sPort.WriteLine(TURN_OFF_LOAD);
+            sPort.Write(TURN_OFF_LOAD);
         }
 
         /// <summary>
@@ -269,11 +281,9 @@ namespace XY_FZ35_Control
         public void SetLoadCurrent(double setCurrent)
         {
             // TODO: Test for max value
-            string test;
-            test = setCurrent.ToString("N2") + "A";
-            
-            //sPort.WriteLine(test);
-            sPort.Write(test);
+            string current;
+            current = setCurrent.ToString("N2") + "A";
+            sPort.Write(current);
         }
 
 
@@ -282,7 +292,7 @@ namespace XY_FZ35_Control
         /// </summary>
         public void ReadSettings()
         {
-            sPort.WriteLine(READ_SETTINGS);           
+            sPort.Write(READ_SETTINGS);           
         }
 
         /// <summary>
@@ -321,6 +331,7 @@ namespace XY_FZ35_Control
                 ohpValue = settingsMatch.Groups["ohp"].Value;
             }
 
+            // TODO: Write function to handle time
             if( logDataMatch.Success)
             {
                 logData[0] = GetTimeStamp();

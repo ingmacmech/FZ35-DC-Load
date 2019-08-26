@@ -5,15 +5,107 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XY_FZ35_Control"
         mc:Ignorable="d"
-        Title="XY-FZ35 Control" Height="450" Width="800">
+        Title="XY-FZ35 Control" Height="520" Width="800">
     <Border Padding="10">
         <StackPanel>
-            <Button x:Name="ComButton" Click="ComButton_Click" Content="Com"/>
-            <ComboBox x:Name="ComList"/>
-            <Button x:Name="Test" Click="TestButton_Click" Content="Test"/>
-            <TextBox x:Name="TestTextBox" x:FieldModifier="public" Height="300" TextWrapping="Wrap" Text="TextBox"  />
+            <StackPanel Orientation ="Horizontal">
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
+                        <Button Margin="10 0 10 0" Grid.Column="0" x:Name="ComButton" Click="ComButton_Click" Content="Show Com"/>
+                        <Button Grid.Column="1" x:Name="Connect" Click="Connect_Click" Content="Connect"/>
+                        <Button  Margin="10 0 10 0" Grid.Column="2" x:Name="Disconnect" Click="Disconnect_Click" Content="Disconnect"/>
+                        
+                        
+                    </Grid>
+                    <ComboBox x:Name="ComList" Margin="0 10" SelectedIndex="0"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>  
+                        <Button x:Name="On" Grid.Column="0" Click="OnButton_Click" Content="On" Margin="5 0 5 0"/>
+                        <Button x:Name="Log" Grid.Column="1" Click="LogButton_Click" Content="Start Log" Margin="5 0 5 0"/>
+                    </Grid>
+                    
 
+                    <TextBlock Text="Device Settings" FontWeight="Bold" TextAlignment="Center" Margin="0 10 0 10"/>
+                    <!--Device Settings-->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        
+                        <!--Row 0-->
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Over Voltage Protection: " TextAlignment="Right" />
+                        <TextBox Grid.Column="1" Grid.Row="0" Text="00.0" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Grid.Row="0" Text=" [V]"/>
+
+                        <!--Row 1-->
+                        <TextBlock Grid.Column="0" Grid.Row="1" Text="Low Voltage Protection: " TextAlignment="Right"/>
+                        <TextBox Grid.Column="1" Grid.Row="1" Text="00.0" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Grid.Row="1" Text=" [V]"/>
+                        
+                        <!--Row 2-->
+                        <TextBlock Grid.Column="0" Grid.Row="2" Text="Over Current Protection: " TextAlignment="Right"/>
+                        <TextBox Grid.Column="1" Grid.Row="2" Text="0.00" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Grid.Row="2" Text=" [A]"/>
+
+                        <!--Row 3-->
+                        <TextBlock Grid.Column="0" Grid.Row="3" Text="Over Power Protection: " TextAlignment="Right"/>
+                        <TextBox Grid.Column="1" Grid.Row="3" Text="00.00" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Grid.Row="3" Text=" [W]"/>
+
+                        <!--Row 4-->
+                        <TextBlock Grid.Column="0" Grid.Row="4" Text="Max Capacity:" TextAlignment="Right"/>
+                        <TextBox Grid.Column="1" Grid.Row="4" Text="0.000" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Grid.Row="4" Text=" [Ah]"/>
+
+                        <!--Row 4-->
+                        <TextBlock Grid.Column="0" Grid.Row="5" Text="Max Discharge Time: " TextAlignment="Right"/>
+                        <TextBox Grid.Column="1" Grid.Row="5" Text="0.000" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Grid.Row="5" Text=" [hh:mm]"/>
+                    </Grid>
+
+                    <TextBlock Text="Load Current" FontWeight="Bold" Margin="0 10 0 10"/>
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                            <ColumnDefinition Width="0.5*"/>
+                        </Grid.ColumnDefinitions>
+                        <Slider Grid.Column="0" Margin="0 0 10 0"/>
+                        <TextBox Grid.Column="1"/>
+                        <TextBlock Grid.Column="2" Text=" [A]"/>
+
+                    </Grid>
+
+                    <TextBox Text="Serial Command Display" Margin="0 20 0 0" Height="150" ScrollViewer.CanContentScroll="True"/>
+                    
+                </StackPanel>
+
+                <Canvas>
+                    
+                    
+                </Canvas>
+                
+            </StackPanel>
         </StackPanel>
     </Border>
 </Window>

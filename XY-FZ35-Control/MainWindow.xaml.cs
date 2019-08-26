@@ -27,7 +27,6 @@ namespace XY_FZ35_Control
        
         
 
-
         public MainWindow()
         {
             InitializeComponent();
@@ -77,15 +76,6 @@ namespace XY_FZ35_Control
              index = 0;
              */
 
-
-
-
-
-
-
-
-
-
         }
 
         public void SetText (string str)
@@ -93,8 +83,24 @@ namespace XY_FZ35_Control
            // TestTextBox.AppendText(str);
         }
 
-        
+        private void Connect_Click(object sender, RoutedEventArgs e)
+        {
 
+        }
 
+        private void Disconnect_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LogButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void OnButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
