@@ -30,8 +30,8 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>  
-                        <Button x:Name="On" Grid.Column="0" Click="OnButton_Click" Content="On" Margin="5 0 5 0"/>
-                        <Button x:Name="Log" Grid.Column="1" Click="LogButton_Click" Content="Start Log" Margin="5 0 5 0"/>
+                        <Button x:Name="onButton" Grid.Column="0" Click="OnButton_Click" Content="On" Margin="5 0 5 0"/>
+                        <Button x:Name="logButton" Grid.Column="1" Click="LogButton_Click" Content="Start Log" Margin="5 0 5 0"/>
                     </Grid>
                     
 
@@ -54,36 +54,36 @@
                         
                         <!--Row 0-->
                         <TextBlock Grid.Column="0" Grid.Row="0" Text="Over Voltage Protection: " TextAlignment="Right" />
-                        <TextBox Grid.Column="1" Grid.Row="0" Text="00.0" TextAlignment="Center"/>
+                        <TextBox x:Name="ovpTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="0" Text="00.0" TextAlignment="Center"/>
                         <TextBlock Grid.Column="2" Grid.Row="0" Text=" [V]"/>
 
                         <!--Row 1-->
                         <TextBlock Grid.Column="0" Grid.Row="1" Text="Low Voltage Protection: " TextAlignment="Right"/>
-                        <TextBox Grid.Column="1" Grid.Row="1" Text="00.0" TextAlignment="Center"/>
+                        <TextBox x:Name="lvpTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="1" Text="00.0" TextAlignment="Center"/>
                         <TextBlock Grid.Column="2" Grid.Row="1" Text=" [V]"/>
                         
                         <!--Row 2-->
                         <TextBlock Grid.Column="0" Grid.Row="2" Text="Over Current Protection: " TextAlignment="Right"/>
-                        <TextBox Grid.Column="1" Grid.Row="2" Text="0.00" TextAlignment="Center"/>
+                        <TextBox x:Name="ocpTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="2" Text="0.00" TextAlignment="Center"/>
                         <TextBlock Grid.Column="2" Grid.Row="2" Text=" [A]"/>
 
                         <!--Row 3-->
                         <TextBlock Grid.Column="0" Grid.Row="3" Text="Over Power Protection: " TextAlignment="Right"/>
-                        <TextBox Grid.Column="1" Grid.Row="3" Text="00.00" TextAlignment="Center"/>
+                        <TextBox x:Name="oppTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="3" Text="00.00" TextAlignment="Center"/>
                         <TextBlock Grid.Column="2" Grid.Row="3" Text=" [W]"/>
 
                         <!--Row 4-->
-                        <TextBlock Grid.Column="0" Grid.Row="4" Text="Max Capacity:" TextAlignment="Right"/>
-                        <TextBox Grid.Column="1" Grid.Row="4" Text="0.000" TextAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Grid.Row="4" Text="Max Capacity: " TextAlignment="Right"/>
+                        <TextBox x:Name="oahTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="4" Text="0.000" TextAlignment="Center"/>
                         <TextBlock Grid.Column="2" Grid.Row="4" Text=" [Ah]"/>
 
                         <!--Row 4-->
                         <TextBlock Grid.Column="0" Grid.Row="5" Text="Max Discharge Time: " TextAlignment="Right"/>
-                        <TextBox Grid.Column="1" Grid.Row="5" Text="0.000" TextAlignment="Center"/>
+                        <TextBox x:Name="ohpTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="5" Text="0.000" TextAlignment="Center"/>
                         <TextBlock Grid.Column="2" Grid.Row="5" Text=" [hh:mm]"/>
                     </Grid>
 
-                    <TextBlock Text="Load Current" FontWeight="Bold" Margin="0 10 0 10"/>
+                    <TextBlock  Text="Load Current" FontWeight="Bold" Margin="0 10 0 10"/>
                     
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -91,8 +91,14 @@
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="0.5*"/>
                         </Grid.ColumnDefinitions>
-                        <Slider Grid.Column="0" Margin="0 0 10 0"/>
-                        <TextBox Grid.Column="1"/>
+                        
+                        <Slider  Grid.Column="0" Margin="0 0 10 0" />
+                        
+                        <TextBox x:Name="loadCurrentTextBox" KeyDown="TextBoxValue_KeyEnter" Text="0.00" Grid.Column="1">
+                            
+                            
+                        </TextBox>
+                        
                         <TextBlock Grid.Column="2" Text=" [A]"/>
 
                     </Grid>

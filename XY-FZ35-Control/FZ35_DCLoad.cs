@@ -14,6 +14,9 @@ namespace XY_FZ35_Control
     /// </summary>
     class FZ35_DCLoad
     {
+        // TODO: Implement set max discharge time
+
+
         // Device Comands
         private const string START_COMAND = "start";
         private const string STOP_COMAND = "stop";
@@ -64,6 +67,9 @@ namespace XY_FZ35_Control
         List<double[]> loggedData = new List<double[]>(3600); // Holds data for 1h after it has to allocate
         DateTime timeStartLogging;
 
+        private bool isLogging = false;
+        private bool isOn = false;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -89,6 +95,16 @@ namespace XY_FZ35_Control
             timeStamp = newTimeSpan.TotalSeconds;
 
             return timeStamp;
+        }
+
+        public bool IsLogging()
+        {
+            return isLogging;
+        }
+
+        public bool IsOutputOn()
+        {
+            return isOn;
         }
 
         /// <summary>
@@ -247,6 +263,7 @@ namespace XY_FZ35_Control
         /// </summary>
         private void StartUpload()
         {
+            isLogging = true;
             sPort.Write(START_COMAND);
         }
 
@@ -256,6 +273,7 @@ namespace XY_FZ35_Control
         private void StopUpload()
         {
             sPort.Write(STOP_COMAND);
+            isLogging = false;
         }
 
         /// <summary>
@@ -263,6 +281,7 @@ namespace XY_FZ35_Control
         /// </summary>
         public void TurnOnLoad()
         {
+            isOn = true;
             sPort.Write(TURN_ON_LOAD);
         }
 
@@ -272,6 +291,7 @@ namespace XY_FZ35_Control
         public void TurnOffLoad()
         {
             sPort.Write(TURN_OFF_LOAD);
+            isOn = false;
         }
 
         /// <summary>
