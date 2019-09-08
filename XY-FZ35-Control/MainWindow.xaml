@@ -79,7 +79,7 @@
 
                         <!--Row 4-->
                         <TextBlock Grid.Column="0" Grid.Row="5" Text="Max Discharge Time: " TextAlignment="Right"/>
-                        <TextBox x:Name="ohpTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="5" Text="0.000" TextAlignment="Center"/>
+                        <TextBox x:Name="ohpTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="5" Text="XX:XX" TextAlignment="Center"/>
                         <TextBlock Grid.Column="2" Grid.Row="5" Text=" [hh:mm]"/>
                     </Grid>
 

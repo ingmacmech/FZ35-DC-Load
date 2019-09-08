@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.IO.Ports;
 using System.Text.RegularExpressions;
@@ -39,7 +39,7 @@ namespace XY_FZ35_Control
         private const double MAX_POWER = 35.5;
 
         // Device Settings
-        private double ovpValue = 0.0;
+        private double _OverVoltageProtection = 0.0;
         private double ocpValue = 0.0;
         private double oppValue = 0.0;
         private double capacityValue = 0.0;
@@ -74,13 +74,13 @@ namespace XY_FZ35_Control
         /// Constructor
         /// </summary>
         /// <param name="portName"> COM Port name ex. "COM1" </param>
-        public FZ35_DCLoad(string portName)
+        public FZ35_DCLoad (string portName)
         {
-            PortName = portName;
+            SetPortName(portName);
             OpenCommunicationPort();
             sPort.DiscardInBuffer();
             sPort.DataReceived += DataRecivedHandler;
-            ReadSettings();
+            
         }
 
         /// <summary>
@@ -130,148 +130,133 @@ namespace XY_FZ35_Control
         }
 
         /// <summary>
-        /// Sets and gets the port name
+        /// Sets the port name
         /// </summary>
-        /// <value name="portName"> Serial port name ex. "COM1" </value>
-        private string PortName
+        /// <param name="portName"> Serial port name ex. "COM1" </param>        
+        private void SetPortName(string portName)
         {
-            get { return portName; }
-
-            set
-            {
-                portName = value;
-            }   
+            this.portName = portName;
         }
 
         /// <summary>
-        /// Set and get the over voltage protection of the device and stores the value.
-        /// Checks if the new value is inside the limits
+        /// Sets the over voltage protection of the device and stores the value.
+        /// Checks if the new value is inside the limits 
         /// </summary>
+        /// <param name="voltageLevel"></param>
         public double OverVoltageProtection
         {
-            get { return ovpValue; }
-
+            get
+            {
+                return _OverVoltageProtection;
+            }
             set
             {
                 string voltage;
-
                 if (value <= MAX_VOLTAGE) //TODO: Check for minimum value
                 {
-                    ovpValue = value;
+                    _OverVoltageProtection = value;
                 }
                 else
                 {
-                    ovpValue = MAX_VOLTAGE;
+                    _OverVoltageProtection = MAX_VOLTAGE;
                     MessageBox.Show(VALUE_OUT_OF_RANGE);
                 }
 
-                voltage = "OVP:" + ovpValue.ToString("00.0");
+                voltage = "OVP:" + _OverVoltageProtection.ToString("00.0");
                 sPort.Write(voltage);
             }
+            
+
+            
         }
 
         /// <summary>
-        /// Set and get the over current protection of the device and stores the value.
-        /// Checks the new value if it exceeded the Max value. 
+        /// Sets the over current protection of the device and stores the value.
+        /// Checks the new value if it exceeded the Max value.  
         /// </summary>
-        public double OverCurrentProtection
+        /// <param name="currentLevel"> Over current protection value </param>
+        public void SetOverCurrentProtection(double currentLevel)
         {
-            get { return ocpValue; }
+            string current;
 
-            set
+            if (currentLevel <= MAX_CURRENT)
             {
-                string current;
-
-                if (value <= MAX_CURRENT)
-                {
-                    ocpValue = value;
-                }
-                else
-                {
-                    ocpValue = MAX_CURRENT;
-                    MessageBox.Show(VALUE_OUT_OF_RANGE);
-                }
-
-                current = "OCP:" + ocpValue.ToString("0.00");
-                sPort.Write(current);
+                ocpValue = currentLevel;
             }
+            else
+            {
+                ocpValue = MAX_CURRENT;
+                MessageBox.Show(VALUE_OUT_OF_RANGE);
+            }
+
+            current = "OCP:" + ocpValue.ToString("0.00");
+            sPort.Write(current);
         }
 
         /// <summary>
-        /// Set and get the over power protection of the device and stores the value.
+        /// Sets the over power protection of the device and stores the value.
         /// Checks the new value if it exceeded the Max value.
         /// The device turns off the Input if the power exceeds this value
         /// </summary>
-        public double OverPowerProtection
+        /// <param name="powerLevel"> Over power protection value in W </param>
+        public void SetOverPowerProtection(double powerLevel)
         {
-            get { return oppValue; }
-
-            set
+            string power;
+            if (powerLevel <= MAX_POWER)
             {
-                string power;
-                if (value <= MAX_POWER)
-                {
-                    oppValue = value;
-                }
-                else
-                {
-                    oppValue = MAX_POWER;
-                    MessageBox.Show(VALUE_OUT_OF_RANGE);
-                }
-
-                power = "OPP:" + oppValue.ToString("00.00");
-                sPort.Write(power);
+                oppValue = powerLevel;
             }
+            else
+            {
+                oppValue = MAX_POWER;
+                MessageBox.Show(VALUE_OUT_OF_RANGE);
+            }
+
+            power = "OPP:" + oppValue.ToString("00.00");
+            sPort.Write(power);
         }
 
         /// <summary>
-        /// Set and get the maximum capacity of the device and stores the value.
+        /// Sets the maximum capacity of the device and stores the value.
         /// The device will turn off the input if the capacity level is reached. 
         /// </summary>
-        public double MaximumCapacity
+        /// <param name="capacityLevel"> Capacity value in Ah </param>
+        public void SetMaximumCapacity(double capacityLevel)
         {
-            get { return oahValue; }
+            string capacity;
+            /* TODO: The capacity value can be set in different ranges.
+             *       Check if it's possible and how to implement it. 
+            */
+            capacityValue = capacityLevel;
 
-            set
-            {
-                string capacity;
-                /* TODO: The capacity value can be set in different ranges.
-                 *       Check if it's possible and how to implement it. 
-                */
-                capacityValue = value;
-
-                capacity = "OHA:" + oahValue.ToString("0.000");
-                sPort.Write(capacity);
-            }
+            capacity = "OHA:" + capacityLevel.ToString("0.000");
+            sPort.Write(capacity);
         }
 
         /// <summary>
-        /// Set and get minimum voltage protection of the device and stores it.
+        /// Sets minimum voltage protection of the device and stores it.
         /// The new value is checked against the max and min boundaries.
         /// The device will turn of if this voltage is reached.
         /// This is useful to protect the battery during discharge.
         /// </summary>
-        public double LowVoltageProtection
+        /// <param name="voltageLevel">  </param>
+        public void SetLowVoltageProtection(double voltageLevel)
         {
-            get { return lvpValue; }
-
-            set
+            string voltage;
+            // TODO: Implement the max value check, and decide how to react 
+            if (voltageLevel >= MIN_VOLTAGE)
             {
-                string voltage;
-                // TODO: Implement the max value check, and decide how to react 
-                if (value >= MIN_VOLTAGE)
-                {
-                    lvpValue = value;
-                }
-                else
-                {
-                    lvpValue = MIN_VOLTAGE;
-                    MessageBox.Show(VALUE_OUT_OF_RANGE);
-                }
-
-                voltage = "LVP:" + lvpValue.ToString("00.0");
-                sPort.Write(voltage);
+                lvpValue = voltageLevel;
             }
+            else
+            {
+                lvpValue = MIN_VOLTAGE;
+                MessageBox.Show(VALUE_OUT_OF_RANGE);
+            }
+
+            voltage = "LVP:" + voltageLevel.ToString("00.0");
+
+            sPort.Write(voltage);
         }
 
         /// <summary>
@@ -337,8 +322,7 @@ namespace XY_FZ35_Control
         /// </summary>
         public void ReadSettings()
         {
-            sPort.Write(READ_SETTINGS);
-            Thread.Sleep(250);
+            sPort.Write(READ_SETTINGS);           
         }
 
         /// <summary>
@@ -374,7 +358,7 @@ namespace XY_FZ35_Control
 
             if ( settingsMatch.Success)
             {
-                ovpValue = Double.Parse(settingsMatch.Groups["ovp"].Value);
+                _OverVoltageProtection = Double.Parse(settingsMatch.Groups["ovp"].Value);
                 ocpValue = Double.Parse(settingsMatch.Groups["ocp"].Value);
                 oppValue = Double.Parse(settingsMatch.Groups["opp"].Value);
                 lvpValue = Double.Parse(settingsMatch.Groups["lvp"].Value);

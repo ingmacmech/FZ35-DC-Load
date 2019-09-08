@@ -61,6 +61,7 @@ namespace XY_FZ35_Control
             try
             {
                 device = new FZ35_DCLoad(ComList.SelectedItem.ToString());
+                DisplaySettings();
                 messageTextBox.AppendText("Connected to device on Port: " 
                                                + ComList.SelectedItem.ToString()
                                                + "\n");
@@ -127,23 +128,23 @@ namespace XY_FZ35_Control
                         break;
 
                     case "ovpTextBox":
-                        device.SetOverVoltageProtection(double.Parse(textBox.Text));
+                        device.OverVoltageProtection = double.Parse(textBox.Text);
                         break;
 
                     case "lvpTextBox":
-                        device.SetLowVoltageProtection(double.Parse(textBox.Text));
+                        device.LowVoltageProtection = double.Parse(textBox.Text);
                         break;
 
                     case "ocpTextBox":
-                        device.SetOverCurrentProtection(double.Parse(textBox.Text));
+                        device.OverCurrentProtection = double.Parse(textBox.Text);
                         break;
 
                     case "oppTextBox":
-                        device.SetOverPowerProtection(double.Parse(textBox.Text));
+                        device.OverPowerProtection = double.Parse(textBox.Text);
                         break;
 
                     case "oahTextBox":
-                        device.SetMaximumCapacity(double.Parse(textBox.Text));
+                        device.MaximumCapacity = double.Parse(textBox.Text);
                         break;
 
                     case "ohpTextBox":
@@ -155,6 +156,17 @@ namespace XY_FZ35_Control
                 }
                 
             }
+
+        }
+
+        private void DisplaySettings()
+        {
+            ovpTextBox.Text = device.OverVoltageProtection.ToString("00.0");
+            lvpTextBox.Text = device.LowVoltageProtection.ToString("00.0");
+            ocpTextBox.Text = device.OverCurrentProtection.ToString("0.00");
+            oppTextBox.Text = device.OverPowerProtection.ToString("00.00");
+            oahTextBox.Text = device.MaximumCapacity.ToString("0.000");
+            // TODO: implement Max Discharge time
 
         }
     }
