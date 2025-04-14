@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO.Ports;
+using LineCharts;
+using System.Windows.Media;
 
 namespace XY_FZ35_Control
 {
@@ -23,13 +15,57 @@ namespace XY_FZ35_Control
     {
         private FZ35_DCLoad device; //= new FZ35_DCLoad("COM13");
        
-        private String[] value = new String[1000];
-       
-        
+        //private String[] value = new String[1000];
+
+        private ChartStyleGridlines cs;
+        private DataCollection dc;
+        private DataSeries ds;
+
 
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void AddChart()
+        {
+            cs = new ChartStyleGridlines();
+            dc = new DataCollection();
+            ds = new DataSeries();
+            cs.ChartCanvas = chartCanvas;
+            cs.TextCanvas = textCanvas;
+            cs.Title = "Sine and Cosine Chart";
+            cs.XMin = 0;
+            cs.XMax = 7;
+            cs.YMin = -1.5;
+            cs.YMax = 1.5;
+            cs.YTick = 0.5;
+            cs.GridlinePattern = ChartStyleGridlines.GridlinePatternEnum.Dot;
+            cs.GridlineColor = Brushes.Black;
+            cs.AddChartStyle(tbTitle, tbXLabel, tbYLabel);
+            // Draw Sine curve:
+            ds.LineColor = Brushes.Blue;
+            ds.LineThickness = 2;
+            for (int i = 0; i < 50; i++)
+            {
+                double x = i / 5.0;
+                double y = Math.Sin(x);
+                ds.LineSeries.Points.Add(new Point(x, y));
+            }
+            dc.DataList.Add(ds);
+            // Draw cosine curve:
+            ds = new DataSeries();
+            ds.LineColor = Brushes.Red;
+            ds.LinePattern = DataSeries.LinePatternEnum.DashDot;
+            ds.LineThickness = 2;
+            for (int i = 0; i < 50; i++)
+            {
+                double x = i / 5.0;
+                double y = Math.Cos(x);
+                ds.LineSeries.Points.Add(new Point(x, y));
+            }
+            dc.DataList.Add(ds);
+            dc.AddLines(cs);
         }
 
 
@@ -71,7 +107,7 @@ namespace XY_FZ35_Control
             {
                 messageTextBox.AppendText("Connect to device failed!\n");             
             }
-            
+            AddChart();
         }
 
         private void Disconnect_Click(object sender, RoutedEventArgs e)
@@ -169,5 +205,7 @@ namespace XY_FZ35_Control
             // TODO: implement Max Discharge time
 
         }
+
+        
     }
 }

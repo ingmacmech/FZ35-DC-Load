@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:XY_FZ35_Control"
         mc:Ignorable="d"
-        Title="XY-FZ35 Control" Height="520" Width="800">
+        Title="XY-FZ35 Control">
     <Border Padding="10">
         <StackPanel>
             <StackPanel Orientation ="Horizontal">
@@ -20,20 +20,20 @@
                         <Button x:Name="ComButton" Margin="10 0 10 0" Grid.Column="0"  Click="ComButton_Click" Content="Show Com"/>
                         <Button x:Name="Connect" Grid.Column="1"  Click="Connect_Click" Content="Connect"/>
                         <Button x:Name="Disconnect" Margin="10 0 10 0" Grid.Column="2"  Click="Disconnect_Click" Content="Disconnect"/>
-                        
+
                     </Grid>
-                    
+
                     <ComboBox x:Name="ComList" Margin="0 10" SelectedIndex="0"/>
-                    
+
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>  
+                        </Grid.ColumnDefinitions>
                         <Button x:Name="onButton" Grid.Column="0" Click="OnButton_Click" Content="On" Margin="5 0 5 0"/>
                         <Button x:Name="logButton" Grid.Column="1" Click="LogButton_Click" Content="Start Log" Margin="5 0 5 0"/>
                     </Grid>
-                    
+
 
                     <TextBlock Text="Device Settings" FontWeight="Bold" TextAlignment="Center" Margin="0 10 0 10"/>
                     <!--Device Settings-->
@@ -51,7 +51,7 @@
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
-                        
+
                         <!--Row 0-->
                         <TextBlock Grid.Column="0" Grid.Row="0" Text="Over Voltage Protection: " TextAlignment="Right" />
                         <TextBox x:Name="ovpTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="0" Text="00.0" TextAlignment="Center"/>
@@ -61,7 +61,7 @@
                         <TextBlock Grid.Column="0" Grid.Row="1" Text="Low Voltage Protection: " TextAlignment="Right"/>
                         <TextBox x:Name="lvpTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="1" Text="00.0" TextAlignment="Center"/>
                         <TextBlock Grid.Column="2" Grid.Row="1" Text=" [V]"/>
-                        
+
                         <!--Row 2-->
                         <TextBlock Grid.Column="0" Grid.Row="2" Text="Over Current Protection: " TextAlignment="Right"/>
                         <TextBox x:Name="ocpTextBox" KeyDown="TextBoxValue_KeyEnter" Grid.Column="1" Grid.Row="2" Text="0.00" TextAlignment="Center"/>
@@ -84,35 +84,52 @@
                     </Grid>
 
                     <TextBlock  Text="Load Current" FontWeight="Bold" Margin="0 10 0 10"/>
-                    
+
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="0.5*"/>
                             <ColumnDefinition Width="0.5*"/>
                         </Grid.ColumnDefinitions>
-                        
+
                         <Slider  Grid.Column="0" Margin="0 0 10 0" />
-                        
+
                         <TextBox x:Name="loadCurrentTextBox" KeyDown="TextBoxValue_KeyEnter" Text="0.00" Grid.Column="1">
-                            
-                            
+
+
                         </TextBox>
-                        
+
                         <TextBlock Grid.Column="2" Text=" [A]"/>
 
                     </Grid>
 
                     <TextBlock Text="Messages:" FontWeight="Bold" Margin="0 10 0 0"/>
                     <TextBox x:Name="messageTextBox"  Margin="0 5 0 0" Height="150" ScrollViewer.CanContentScroll="True"/>
-                    
+
                 </StackPanel>
 
-                <Canvas>
-                    
-                    
-                </Canvas>
-                
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Name="column1" Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Name="row1" Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Margin="2" x:Name="tbTitle" Grid.Column="1" Grid.Row="0" FontSize="14" FontWeight="Bold" TextAlignment="Center" Text="Title"/>
+                    <TextBlock Margin="2,2,0,2" x:Name="tbXLabel" Grid.Column="1" Grid.Row="2" TextAlignment="Center" Text="X Axis"/>
+                    <TextBlock Margin="2" Name="tbYLabel" Grid.Column="0" Grid.Row="1" TextAlignment="Center" Text="Y Axis">
+                        <TextBlock.LayoutTransform>
+                            <RotateTransform Angle="-90"/>
+                        </TextBlock.LayoutTransform>
+                    </TextBlock>
+                    <Grid Margin="18,0,0,0" x:Name ="chartGrid" Grid.Row="1" ClipToBounds="False" Background="Transparent" HorizontalAlignment="Left" Width="500" Grid.ColumnSpan="2" />
+                    <Canvas Margin="2,2,0,2" Name="textCanvas" Grid.Column="1" Grid.Row="1" ClipToBounds="True">
+                        <Canvas Name="chartCanvas" ClipToBounds="True" Width="500" Height="400"/>
+                    </Canvas>
+                </Grid>
             </StackPanel>
         </StackPanel>
     </Border>
